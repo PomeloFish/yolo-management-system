@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "dev:frontend": "vite",
-    "dev:backend": "tsc -p ./src/backend && node dist/backend/app.js"
+    "dev:backend": "tsc -p ./src/backend && node dist/backend/main.js"
   },
   "dependencies": {
     "dotenv": "^17.2.3",
