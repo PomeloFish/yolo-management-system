@@ -1,7 +1,7 @@
-export interface _Image{
+export interface Image{
     // dataset building
-    File: string,
-    Split: '' | 'Train' | 'Test' | 'Predict',
+    File?: string,
+    Split?: '' | 'Train' | 'Test' | 'Predict',
 
     // dataset building project management
     Annotator?: number,

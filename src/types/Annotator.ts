@@ -1,4 +1,4 @@
-export interface _Annotator{
+export interface Annotator{
     ID: number,
     Name: string
 }

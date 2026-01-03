@@ -1,4 +1,4 @@
-export interface _Labels{
+export interface Labels{
     // bounding box
     Height: number,
     Width: number,
