@@ -1,4 +1,4 @@
 export interface Annotator{
-    ID: number,
-    Name: string
+    ID?: number,
+    Name?: string
 }

@@ -1,5 +1,5 @@
 export interface Class{
-    ID: number,
-    English_name: string,
+    ID?: number,
+    English_name?: string,
     Chinese_name?: string,
 }
