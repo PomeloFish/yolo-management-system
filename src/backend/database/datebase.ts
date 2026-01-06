@@ -1,4 +1,4 @@
-import { Pool, PoolConfig } from "pg";
+import { Pool, PoolConfig } from 'pg';
 import * as fs from 'fs';
 import { Image } from '../../types/Image';
 import { Class } from '../../types/Class';
@@ -50,9 +50,12 @@ class CRUDTools {
     }
 
     static async search(pool: Pool, query: parameterizedSearchQuery) {
+        return (await CRUDTools.query(pool, query.sql, query.params)).rows;
+    }
 
+    static async query(pool: Pool, sql: string, params: any[] = []){
         const client = await pool.connect();
-        const result = (await client.query(query.sql, query.params)).rows;
+        const result = await client.query(sql, params);
         client.release();
         return result;
     }
@@ -69,6 +72,13 @@ export class Database {
             if (err) throw err;
             this.pool.query(data.toString());
         });
+    }
+
+    async query(sql: string, params:any[] = []){
+        const client = await this.pool.connect();
+        const result = await client.query(sql, params);
+        client.release();
+        return result;
     }
 
     async getAllImages(columns: string[] = ['*']){
@@ -116,7 +126,8 @@ export class Database {
         const subQuery = new parameterizedSearchQuery('Annotators', annotatorGiven, ['ID']);
 
         const query = new parameterizedSearchQuery(
-            'Images LEFT JOIN Labels ON Images.File = Labels.Image', {}, [
+            'Images LEFT JOIN Labels ON Images.File = Labels.Image', {}, 
+            [
                 'COUNT(*) AS "The number of Annotations"',
                 'COUNT(DISTINCT Image) AS "The number of Image"'
             ]
@@ -128,5 +139,23 @@ export class Database {
             "The number of Annotations": number,
             "The number of Image": number
         }[]>;
+    }
+
+    async clearSplit(){
+        return CRUDTools.query(this.pool, `
+            UPDATE Images SET
+                Split = ''
+            WHERE Split in ('Train', 'Test');
+            `);
+    }
+
+    async splitDataset(test_size: number){
+        if (test_size < 0.0 || test_size > 1.0) return 0;
+
+        return CRUDTools.query(this.pool, `
+            UPDATE Images SET 
+                Split = (CASE WHEN RANDOM()>$1 THEN 'Train' ELSE 'Test' END)
+            WHERE Split IS NULL;
+            `, [test_size]);
     }
 }
