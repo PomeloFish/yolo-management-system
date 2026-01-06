@@ -1,10 +1,10 @@
 export interface Label{
     // bounding box
-    Height?: number,
-    Width?: number,
-    Center_X?: number,
-    Center_Y?: number,
+    height?: number,
+    width?: number,
+    center_X?: number,
+    center_Y?: number,
 
-    Class?: number,
-    Image?: string,
+    class?: number,
+    image?: string,
 }

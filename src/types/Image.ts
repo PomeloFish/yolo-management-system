@@ -1,14 +1,14 @@
 export interface Image{
     // dataset building
-    File?: string,
-    Split?: '' | 'Train' | 'Test' | 'Predict',
+    file?: string,
+    split?: '' | 'Train' | 'Test' | 'Predict',
 
     // dataset building project management
-    Annotator?: number,
-    Annotated_at?: Date,
+    annotator?: number,
+    annotated_at?: Date,
 
     // dataset analysis
-    Filmed_location?: string,
-    Filmed_at?: Date,
-    Source?: string
+    filmed_location?: string,
+    filmed_at?: Date,
+    source?: string
 }
