@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS Classes (
 
 CREATE TABLE IF NOT EXISTS Images (
 	File TEXT,
-	Split TEXT NOT NULL DEFAULT '' CHECK(Split IN ('Train', 'Test', 'Prediction', '')),
+	Split TEXT DEFAULT '' CHECK(Split IN ('Train', 'Test', 'Prediction', '')),
     
 	Annotator INTEGER,
     Annotated_at DATE,
