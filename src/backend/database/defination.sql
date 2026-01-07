@@ -55,7 +55,7 @@ CREATE TABLE IF NOT EXISTS Labels (
 );
 
 
--- View: Work
+-- View: Work, querying Annotators, Images, Labels
 CREATE OR REPLACE VIEW Work AS
 SELECT
     A.A_name,
@@ -74,7 +74,7 @@ INNER JOIN Annotators AS A ON I.Annotator = A.A_id
 INNER JOIN Labels AS L ON I.I_file = L.Image;
 
 
--- View: Work_count
+-- View: Work_count, querying Work and Annotators
 CREATE OR REPLACE VIEW Work_count AS
 WITH W AS (
     SELECT
@@ -93,7 +93,7 @@ SELECT
 FROM Annotators AS A INNER JOIN W ON A.A_id = W.A_id;
 
 
--- View: Instance
+-- View: Instance, querying Classes and Labels
 CREATE OR REPLACE VIEW Instance AS
 SELECT
     C.C_id,
@@ -108,7 +108,7 @@ SELECT
 FROM Labels AS L INNER JOIN Classes AS C ON L.L_class = C.C_id;
 
 
--- View: Instance_count
+-- View: Instance_count, querying Instance and Classes
 CREATE OR REPLACE VIEW Instance_count AS
 WITH I AS (
     SELECT
