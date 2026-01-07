@@ -93,8 +93,8 @@ SELECT
 FROM Annotators AS A INNER JOIN W ON A.A_id = W.A_id;
 
 
--- View: Instance, querying Classes and Labels
-CREATE OR REPLACE VIEW Instance AS
+-- View: Instances, querying Classes and Labels
+CREATE OR REPLACE VIEW Instances AS
 SELECT
     C.C_id,
     C.English_name,
@@ -108,14 +108,14 @@ SELECT
 FROM Labels AS L INNER JOIN Classes AS C ON L.L_class = C.C_id;
 
 
--- View: Instance_count, querying Instance and Classes
+-- View: Instance_count, querying Instances and Classes
 CREATE OR REPLACE VIEW Instance_count AS
 WITH I AS (
     SELECT
-        Instance.C_id,
+        Instances.C_id,
         count(*) AS I_count
-    FROM Instance
-    GROUP BY Instance.C_id
+    FROM Instances
+    GROUP BY Instances.C_id
 )
 
 SELECT
