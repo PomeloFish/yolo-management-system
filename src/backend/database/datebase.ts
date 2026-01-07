@@ -6,7 +6,7 @@ class whereClause{
     sql: string
     params: any[]
 
-    constructor(pattern: object){
+    constructor(pattern){
         let conditions: string[] = [];
         let params: any[] = [];
         let paramIndex = 1;
@@ -56,17 +56,17 @@ export class Database {
         return result;
     }
 
-    async getAll(table: string, columns: string[] = ['*']){
-        return this.query(`
+    async getAll<T>(table: string, columns: string[] = ['*']){
+        return (await this.query(`
             SELECT ${columns.join(', ')} FROM ${table}
-            `);
+            `)).rows as T[];
     }
 
-    async search(table: string, pattern: object, columns: string[] = ['*']){
+    async search<T>(table: string, pattern: T, columns: string[] = ['*']){
         const wClause = new whereClause(pattern);
-        return this.query(
+        return (await this.query(
             `SELECT ${columns.join(', ')} FROM ${table}` + wClause.sql, wClause.params
-        );
+        )).rows as T[];
     }
 
     async clearSplit(){
