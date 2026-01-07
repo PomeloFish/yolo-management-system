@@ -1,3 +1,4 @@
+-- Table: Annotators
 CREATE TABLE IF NOT EXISTS Annotators (
     A_id INTEGER,
     A_name TEXT,
@@ -5,6 +6,8 @@ CREATE TABLE IF NOT EXISTS Annotators (
     PRIMARY KEY (A_id)
 );
 
+
+-- Table: Images
 CREATE TABLE IF NOT EXISTS Images (
     I_file TEXT,
     Split TEXT DEFAULT '' CHECK (Split IN ('Train', 'Test', 'Prediction', '')),
@@ -22,6 +25,8 @@ CREATE TABLE IF NOT EXISTS Images (
     ) ON UPDATE CASCADE ON DELETE SET NULL
 );
 
+
+-- Table: Classes
 CREATE TABLE IF NOT EXISTS Classes (
     C_id INTEGER,
     English_name TEXT,
@@ -30,6 +35,8 @@ CREATE TABLE IF NOT EXISTS Classes (
     PRIMARY KEY (C_id)
 );
 
+
+-- Table: Labels
 CREATE TABLE IF NOT EXISTS Labels (
     Height REAL CHECK (Height BETWEEN 0.0 AND 1.0),
     Width REAL CHECK (Width BETWEEN 0.0 AND 1.0),
@@ -47,6 +54,8 @@ CREATE TABLE IF NOT EXISTS Labels (
     ) ON UPDATE CASCADE ON DELETE CASCADE
 );
 
+
+-- View: Work
 CREATE OR REPLACE VIEW Work AS
 SELECT
     A.A_name,
@@ -64,6 +73,8 @@ FROM Images AS I
 INNER JOIN Annotators AS A ON I.Annotator = A.A_id
 INNER JOIN Labels AS L ON I.I_file = L.Image;
 
+
+-- View: Work_count
 CREATE OR REPLACE VIEW Work_count AS
 WITH W AS (
     SELECT
@@ -80,3 +91,38 @@ SELECT
     W.File_count,
     W.Label_count
 FROM Annotators AS A INNER JOIN W ON A.A_id = W.A_id;
+
+
+-- View: Instance
+CREATE OR REPLACE VIEW Instance AS
+SELECT
+    C.C_id,
+    C.English_name,
+    C.Chinese_name,
+
+    L.Image,
+    L.Height,
+    L.Width,
+    L.Center_x,
+    L.Center_y
+FROM Labels AS L INNER JOIN Classes AS C ON L.L_class = C.C_id;
+
+
+-- View: Instance_count
+CREATE OR REPLACE VIEW Instance_count AS
+WITH I AS (
+    SELECT
+        Instance.C_id,
+        count(*) AS I_count
+    FROM Instance
+    GROUP BY Instance.C_id
+)
+
+SELECT
+    C.C_id,
+    C.English_name,
+    C.Chinese_name,
+
+    I.I_count
+FROM Classes AS C
+INNER JOIN I ON C.C_id = I.C_id;

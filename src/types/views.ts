@@ -1,3 +1,5 @@
+import { Class } from './tables';
+
 export interface Work{
 
     a_name?: string,
@@ -20,3 +22,15 @@ export interface Work_count{
     file_count: number,
     label_count: number
 };
+
+export interface Instance extends Class{
+    image: string,
+    height: number,
+    width: number,
+    center_x: number,
+    center_y: number
+};
+
+export interface Instance_count extends Class{
+    i_count: number
+}
