@@ -6,7 +6,7 @@ export interface Annotator{
 export interface Image{
     // dataset building
     i_file?: string,
-    split?: '' | 'Train' | 'Test' | 'Predict',
+    split?: '' | 'Train' | 'Test' | 'Prediction',
 
     // dataset building project management
     annotator?: number,
