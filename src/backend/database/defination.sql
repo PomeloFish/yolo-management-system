@@ -79,8 +79,8 @@ CREATE OR REPLACE VIEW Work_count AS
 WITH W AS (
     SELECT
         Work.A_id,
-        count(Work.I_file) AS File_count,
-        count(*) AS Label_count
+        CAST(COUNT(Work.I_file) AS INT) AS File_count,
+        CAST(COUNT(*) AS INT) AS Label_count
     FROM Work
     GROUP BY Work.A_id
 )
@@ -113,7 +113,10 @@ CREATE OR REPLACE VIEW Instance_count AS
 WITH I AS (
     SELECT
         Instances.C_id,
-        count(*) AS I_count
+
+        -- pg.PoolClient.query seems to consider bigint as string
+        CAST(COUNT(*) AS INT) AS Instance_num,
+        CAST(COUNT(Instances.Image) AS INT) AS Image_num
     FROM Instances
     GROUP BY Instances.C_id
 )
@@ -123,7 +126,8 @@ SELECT
     C.English_name,
     C.Chinese_name,
 
-    I.I_count
+    I.Image_num,
+    I.Instance_num
 FROM Classes AS C
 INNER JOIN I ON C.C_id = I.C_id;
 
