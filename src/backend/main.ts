@@ -1,5 +1,7 @@
 import express from 'express';
 import dotenv from 'dotenv';
+import cors from 'cors';
+
 import { Database } from './database/datebase';
 import { Class, Image, Label } from '../types/tables';
 import { body_for_search } from '../types/request_body';
@@ -8,7 +10,7 @@ import { Instance, Instance_count, Work, Work_count } from '../types/views';
 
 // dotenv
 dotenv.config({path:'.dbconfig.env'});
-dotenv.config({path: '.server.env'});
+dotenv.config({path: '.backend.env'});
 
 
 // database
@@ -27,6 +29,10 @@ const db = new Database({
 // express
 const app = express();
 app.use(express.json());
+app.use(cors({
+    origin: process.env.FRONTEND_HOST,
+    methods: ['GET', 'POST']
+}))
 
 // API(GET): get all classes
 app.get('/classes', async (req, res) => {
@@ -119,6 +125,6 @@ app.get('/dataset/split/:test_size', async (req, res) => {
 })
 
 // server listens to port
-app.listen(parseInt(process.env.PORT), () => {
-    console.log(`Server running at http://localhost:${process.env.PORT}`);
+app.listen(parseInt(process.env.BACKEND_PORT), () => {
+    console.log(`Server running at http://localhost:${process.env.BACKEND_PORT}`);
 })
