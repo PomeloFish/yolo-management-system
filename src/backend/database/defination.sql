@@ -126,3 +126,29 @@ SELECT
     I.I_count
 FROM Classes AS C
 INNER JOIN I ON C.C_id = I.C_id;
+
+
+-- Function: clear split records
+CREATE OR REPLACE FUNCTION clear_split() RETURNS SETOF IMAGES AS $$
+WITH Results AS (
+	UPDATE Images SET Split = '' 
+    WHERE Split IN ('Train', 'Test')
+    RETURNING *
+)
+SELECT * FROM Results ORDER BY I_file;
+$$ LANGUAGE Sql;
+
+
+-- Function: split images to Train or Test
+CREATE OR REPLACE FUNCTION split_train_and_test(
+    Test_size REAL
+) RETURNS SETOF IMAGES AS $$
+WITH Result AS (
+    UPDATE Images SET Split = (
+        CASE WHEN RANDOM()<Test_size THEN 'Test' ELSE 'Train' END
+    )
+    WHERE Split IS NULL
+    RETURNING *
+)
+SELECT * FROM Result ORDER BY Split, I_file;
+$$ LANGUAGE Sql;

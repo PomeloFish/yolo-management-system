@@ -1,5 +1,6 @@
 import { Pool, PoolConfig } from 'pg';
 import * as fs from 'fs';
+import { Image } from '../../types/tables';
 
 
 class whereClause{
@@ -69,21 +70,15 @@ export class Database {
         )).rows as T[];
     }
 
-    async clearSplit(){
-        return this.query(`
-            UPDATE Images SET
-                Split = ''
-            WHERE Split in ('Train', 'Test');
-            `);
+    async clearSplit(columns: string[] = ['*']){
+        return this.getAll<Image>('clear_split()', columns);
     }
 
-    async splitDataset(test_size: number){
+    async splitDataset(test_size: number, columns: string[] = ['*']){
         if (test_size < 0.0 || test_size > 1.0) return;
 
-        return this.query(`
-            UPDATE Images SET 
-                Split = (CASE WHEN RANDOM()>$1 THEN 'Train' ELSE 'Test' END)
-            WHERE Split IS NULL;
-            `, [test_size]);
+        return this.getAll<Image>(
+            `split_train_and_test(${test_size})`, columns
+        );
     }
 }
