@@ -31,7 +31,6 @@ class whereClause{
         }
         this.sql = params.length > 0 ? ` WHERE ${conditions.join(' AND ')}` : ``;
         this.params = params;
-        console.log(this.sql);
     }
 }
 
