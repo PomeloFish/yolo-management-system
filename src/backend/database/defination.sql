@@ -75,7 +75,7 @@ INNER JOIN Labels AS L ON I.I_file = L.Image;
 
 
 -- View: Work_count, querying Work and Annotators
-CREATE OR REPLACE VIEW Work_count AS
+CREATE OR REPLACE VIEW Work_counts AS
 WITH W AS (
     SELECT
         Work.A_id,
@@ -108,8 +108,8 @@ SELECT
 FROM Labels AS L INNER JOIN Classes AS C ON L.L_class = C.C_id;
 
 
--- View: Instance_count, querying Instances and Classes
-CREATE OR REPLACE VIEW Instance_count AS
+-- View: Instance_counts, querying Instances and Classes
+CREATE OR REPLACE VIEW Instance_counts AS
 WITH I AS (
     SELECT
         Instances.C_id,
