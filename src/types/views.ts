@@ -32,5 +32,6 @@ export interface Instance extends Class{
 };
 
 export interface Instance_count extends Class{
-    i_count?: number
+    image_num?: number,
+    instance_num?: number,
 }
